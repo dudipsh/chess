@@ -1,0 +1,12 @@
+.app {
+  /*display: grid;*/
+  /*place-content: center;*/
+  /*height: 100vh;*/
+  /*background-color: #3c3b3b;*/
+}
+.flex {
+    display: flex;
+}
+.justify-center {
+    justify-content: center;
+}
