@@ -41,7 +41,6 @@ class ChessEngineService {
   }
 
   piece(square: string) {
-    console.log(game);
     return game.get(square as Square);
   }
 
