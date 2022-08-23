@@ -1,5 +1,6 @@
 .chess-board {
-    border: 2px solid #2c2c2c;
+    border: 2px solid #8a8686;
+    border-radius: 4px;
     text-align: center;
     width: 60vw;
     height: 60vw;
@@ -33,15 +34,17 @@
 }
 .rank-label {
     position: absolute;
-    color: #7e5b41;
-    margin: 33px -16px;
+    left: -33%;
+    bottom: 35%;
+    text-transform: capitalize;
+    font-size: 18px;
 }
 .file-label {
     position: absolute;
-    color: #7e5b41;
-    margin-left: 45%;
-    bottom: -33%;
     text-transform: capitalize;
+    font-size: 18px;
+    left: 33%;
+    bottom: -40%;
 }
 
 .brown .white-square{
@@ -63,3 +66,34 @@
 }
 
 
+.brown .dark{
+    color: #bfa481;
+}
+.brown .white{
+    color: #7e5b41;
+}
+
+.green .dark{
+    color: #eeeed2;
+}
+.green .white{
+    color: #769656;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .chess-board {
+        width: 100vw;
+        height: 100vw;
+        margin: auto;
+        max-width: 400px;
+        max-height: 400px;
+    }
+    .rank-label {
+        font-size: 10px;
+    }
+    .file-label {
+        font-size: 10px;
+    }
+
+}

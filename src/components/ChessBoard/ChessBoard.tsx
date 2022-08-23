@@ -54,6 +54,9 @@ export const ChessBoard = ({
         setStatus(data?.status);
         setTimeout(() => {
           resetMove();
+          setStatus(
+            `${chessEngineService.turn() === "w" ? "White" : "Black"} to move`
+          );
         }, 100);
       });
       if (!chessEngineService.isValidMove(move)) {

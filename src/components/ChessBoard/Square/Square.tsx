@@ -1,7 +1,4 @@
 import { RANKS } from "../../../utils/board-utils";
-import { useContext } from "react";
-import { GameBoardContext } from "../../../context/GameBoardContext";
-
 interface SquareProps {
   label: string;
   children?: JSX.Element;
@@ -36,8 +33,8 @@ export const Square = ({
       aria-hidden="true"
       onClick={handleSelectedPiece}
     >
-      {fileName ? <div className="file-label">{fileName}</div> : null}
-      {rankNumber ? <div className="rank-label">{rankNumber}</div> : null}
+      {fileName ? <div className={`file-label`}>{fileName}</div> : null}
+      {rankNumber ? <div className={`rank-label`}>{rankNumber}</div> : null}
       {children}
     </div>
   );
