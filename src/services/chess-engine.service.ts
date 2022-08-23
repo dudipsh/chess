@@ -18,7 +18,7 @@ class ChessEngineService {
   getBoard() {
     return game.board();
   }
-  //
+
   getBestMove() {
     return game.randomMove();
   }
