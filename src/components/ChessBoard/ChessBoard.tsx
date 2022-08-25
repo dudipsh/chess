@@ -23,13 +23,20 @@ export const ChessBoard = ({
   const [boardGame, setBoardGame] = useState<any[]>([]);
   const [status, setStatus] = useState<string>(`${Color[playAs]} to move`);
   const [move, setMove] = useState<IMove>({ from: "", to: "" });
+  const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
   const files = INITIAL_FILES;
 
   useEffect(() => {
     setBoardGame(chessEngineService.getBoard());
   }, []);
 
+  const highlightPiece = (source: Source) => {
+    const moves = chessEngineService.possibleMoves(source);
+    setPossibleMoves(moves);
+  };
+
   const handleSelectedPiece = (source: Source) => {
+    highlightPiece(source);
     const copyMove = { ...move };
     if (copyMove.from && !move.to) {
       copyMove.to = source;
@@ -90,15 +97,22 @@ export const ChessBoard = ({
           return (
             <Square
               moves={move}
+              possibleMoves={possibleMoves}
               key={label}
               label={label}
               rankes={ranks}
               files={files}
               fileIndex={fileIndex}
               rankIndex={rankIndex}
-              handleSelectedPiece={() => handleSelectedPiece(label)}
+              onSelectedPiece={() => handleSelectedPiece(label)}
             >
-              <Piece piece={piece} label={boardGame[rankIndex][fileIndex]} />
+              <Piece
+                piece={piece}
+                onSelectedPiece={() => {
+                  handleSelectedPiece(label);
+                }}
+                label={boardGame[rankIndex][fileIndex]}
+              />
             </Square>
           );
         }}

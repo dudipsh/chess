@@ -39,6 +39,16 @@ class ChessEngineService {
   isValidMove(move: any) {
     return game.isValidMove(move);
   }
+  possibleMoves(square: string) {
+    return game.moves({ square }).map((move) => {
+      if (move.length > 2) {
+        // Ng6 => g6
+        // Nxd8 => d8
+        return move.substring(move.length - 2, move.length);
+      }
+      return move;
+    });
+  }
 
   piece(square: string) {
     return game.get(square as Square);
