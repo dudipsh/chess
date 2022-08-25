@@ -3,6 +3,7 @@ interface SquareProps {
   label: string;
   children?: JSX.Element;
   handleSelectedPiece: (data: any) => void;
+  possibleMoves?: string[];
   fileIndex: number;
   rankes: number[];
   rankIndex: number;
@@ -14,6 +15,7 @@ export const Square = ({
   children,
   label,
   handleSelectedPiece,
+  possibleMoves,
   fileIndex,
   rankes,
   rankIndex,
@@ -25,14 +27,23 @@ export const Square = ({
   const rankNumber = fileIndex === 0 ? rankes.length - rankIndex : "";
   const fileName =
     rankIndex === rankes.length - 1 ? files[RANKS[fileIndex + 1]] : "";
+
   return (
     <div
-      className={`square ${color} ` + (moves.from === label ? " active" : "")}
+      className={`square ${color} `}
       key={label}
       id={label}
       aria-hidden="true"
       onClick={handleSelectedPiece}
     >
+      <div
+        className={
+          (moves.from === label ? " active" : "") +
+          (possibleMoves && possibleMoves?.indexOf(label) > -1
+            ? " highlight"
+            : "")
+        }
+      ></div>
       {fileName ? <div className={`file-label`}>{fileName}</div> : null}
       {rankNumber ? <div className={`rank-label`}>{rankNumber}</div> : null}
       {children}
