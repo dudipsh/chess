@@ -13,7 +13,6 @@ class ChessEngineService {
   constructor() {
     game.load(DEFAULT_FEN_BOARD);
     chessEngine.board = game.board();
-    console.log(game);
   }
 
   getBoard() {

@@ -30,8 +30,13 @@ export const ChessBoard = ({
     setBoardGame(chessEngineService.getBoard());
   }, []);
 
+  const highlightPiece = (source: Source) => {
+    const moves = chessEngineService.possibleMoves(source);
+    setPossibleMoves(moves);
+  };
+
   const handleSelectedPiece = (source: Source) => {
-    handleHoveringPiece(source);
+    highlightPiece(source);
     const copyMove = { ...move };
     if (copyMove.from && !move.to) {
       copyMove.to = source;
@@ -68,11 +73,6 @@ export const ChessBoard = ({
     setBoardGame([...chessEngineService.getBoard()]);
   };
 
-  const handleHoveringPiece = (source: Source) => {
-    const moves = chessEngineService.possibleMoves(source);
-    setPossibleMoves(moves);
-  };
-
   const resetMove = () => {
     setMove({ from: "", to: "" });
   };
@@ -104,12 +104,12 @@ export const ChessBoard = ({
               files={files}
               fileIndex={fileIndex}
               rankIndex={rankIndex}
-              handleSelectedPiece={() => handleSelectedPiece(label)}
+              onSelectedPiece={() => handleSelectedPiece(label)}
             >
               <Piece
                 piece={piece}
-                handleHoveringPiece={() => {
-                  handleHoveringPiece(label);
+                onSelectedPiece={() => {
+                  handleSelectedPiece(label);
                 }}
                 label={boardGame[rankIndex][fileIndex]}
               />

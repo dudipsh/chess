@@ -2,7 +2,7 @@ import { RANKS } from "../../../utils/board-utils";
 interface SquareProps {
   label: string;
   children?: JSX.Element;
-  handleSelectedPiece: (data: any) => void;
+  onSelectedPiece: (data: any) => void;
   possibleMoves?: string[];
   fileIndex: number;
   rankes: number[];
@@ -14,7 +14,7 @@ interface SquareProps {
 export const Square = ({
   children,
   label,
-  handleSelectedPiece,
+  onSelectedPiece,
   possibleMoves,
   fileIndex,
   rankes,
@@ -34,7 +34,7 @@ export const Square = ({
       key={label}
       id={label}
       aria-hidden="true"
-      onClick={handleSelectedPiece}
+      onClick={onSelectedPiece}
     >
       <div
         className={
