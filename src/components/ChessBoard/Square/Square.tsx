@@ -8,7 +8,7 @@ interface SquareProps {
   rankes: number[];
   rankIndex: number;
   files: string[];
-  moves: any;
+  selectedMove: string;
 }
 
 export const Square = ({
@@ -20,7 +20,7 @@ export const Square = ({
   rankes,
   rankIndex,
   files,
-  moves,
+  selectedMove,
 }: SquareProps) => {
   const isEven = (fileIndex + rankIndex) % 2 === 0;
   const color = isEven ? `white-square` : `black-square`;
@@ -38,7 +38,7 @@ export const Square = ({
     >
       <div
         className={
-          (moves.from === label ? " active" : "") +
+          (selectedMove === label ? " active" : "") +
           (possibleMoves && possibleMoves?.indexOf(label) > -1
             ? " highlight"
             : "")

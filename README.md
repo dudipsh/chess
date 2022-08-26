@@ -4,6 +4,10 @@
 ### `yarn start`
 
 
+
+[![chess](https://github.com/dudipsh/chess/blob/master/public/screenshot/screenshot1.png "Game")](https://dudipsh.github.io/chess/)
+
+
 ## Algebraic notation (chess)
 
 ### == Naming the squares ==
@@ -23,23 +27,6 @@ When a piece makes a {{chessgloss|capture}}, an "x" (or the multiplication sign 
 
 
 Some texts, such as the ''[[Encyclopaedia of Chess Openings]]'', omit any indication that a capture has been made. (For example, '''Be5''' instead of Bxe5; '''ed6''' instead of exd6 or exd6&nbsp;e.p.) When it is unambiguous to do so, a pawn capture is sometimes described by specifying only the files involved ('''exd''' or even '''ed'''). These shortened forms are sometimes called ''minimal'' or ''abbreviated'' algebraic notation.
-
-===Disambiguating moves===
-
-````
-| tright
-|
-|  |  |  |rd|ra|x1|  |rd
-|  |  |  |  |  |  |  |  
-|  |  |  |  |  |  |  |  
-|rl|  |  |  |  |  |  |  
-|  |  |  |  |ql|  |  |ql
-|x2|  |  |  |  |  |dl|  
-|ua|  |  |  |  |dl|  |  
-|rl|  |  |  |x3|  |  |ql
-| 1) ...Rdf8, 2) R1a3, 3) Qh4e1
-
-````
 
  
 

@@ -23,58 +23,56 @@ export const ChessBoard = ({
   const [boardGame, setBoardGame] = useState<any[]>([]);
   const [status, setStatus] = useState<string>(`${Color[playAs]} to move`);
   const [move, setMove] = useState<IMove>({ from: "", to: "" });
+  const [selectedMove, setSelectedMove] = useState<string>("");
   const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
   const files = INITIAL_FILES;
+
+  useEffect(() => {
+    if (move.from) {
+      setSelectedMove(move.from);
+    }
+    if (move.to) {
+      setSelectedMove(move.to);
+    }
+  }, [move]);
 
   useEffect(() => {
     setBoardGame(chessEngineService.getBoard());
   }, []);
 
-  const highlightPiece = (source: Source) => {
+  const highlightPath = (source: Source) => {
     const moves = chessEngineService.possibleMoves(source);
     setPossibleMoves(moves);
   };
 
-  const handleSelectedPiece = (source: Source) => {
-    highlightPiece(source);
-    const copyMove = { ...move };
-    if (copyMove.from && !move.to) {
-      copyMove.to = source;
-    } else {
-      const piece = chessEngineService.piece(source);
-      if (piece && piece.color === chessEngineService.turn()) {
-        copyMove.from = source;
-      }
+  const handleSelectedSquare = (square: Source) => {
+    const move = chessEngineService.setMove(square);
+    if (!move.from && !move.to) {
+      setMove({ ...move });
+      setSelectedMove("");
+      setPossibleMoves([]);
+      return;
     }
-
-    setMove(copyMove);
-    applyMove(copyMove);
-    if (chessEngineService.turn() === "b") {
-      chessEngineService.getBestMove();
+    if (move.from) {
+      highlightPath(move.from as Source);
+    }
+    if (move.to) {
       setBoardGame([...chessEngineService.getBoard()]);
+      setStatus(chessEngineService.status());
     }
+    setMove({ ...move });
+    pcMove();
   };
 
-  const applyMove = (copyMove: IMove) => {
-    if (copyMove.from && copyMove.to) {
-      chessEngineService.onMove(copyMove.from, copyMove.to, (data) => {
-        setStatus(data?.status);
-        setTimeout(() => {
-          resetMove();
-          setStatus(
-            `${chessEngineService.turn() === "w" ? "White" : "Black"} to move`
-          );
-        }, 100);
-      });
-      if (!chessEngineService.isValidMove(move)) {
-        resetMove();
-      }
+  const pcMove = () => {
+    if (chessEngineService.turn() === "b") {
+      setTimeout(() => {
+        const bestMove = chessEngineService.getBestMove();
+        setSelectedMove(bestMove);
+        setBoardGame([...chessEngineService.getBoard()]);
+        setStatus(chessEngineService.status());
+      }, 1000);
     }
-    setBoardGame([...chessEngineService.getBoard()]);
-  };
-
-  const resetMove = () => {
-    setMove({ from: "", to: "" });
   };
 
   return (
@@ -96,7 +94,7 @@ export const ChessBoard = ({
         }) => {
           return (
             <Square
-              moves={move}
+              selectedMove={selectedMove}
               possibleMoves={possibleMoves}
               key={label}
               label={label}
@@ -104,15 +102,9 @@ export const ChessBoard = ({
               files={files}
               fileIndex={fileIndex}
               rankIndex={rankIndex}
-              onSelectedPiece={() => handleSelectedPiece(label)}
+              onSelectedPiece={() => handleSelectedSquare(label)}
             >
-              <Piece
-                piece={piece}
-                onSelectedPiece={() => {
-                  handleSelectedPiece(label);
-                }}
-                label={boardGame[rankIndex][fileIndex]}
-              />
+              <Piece piece={piece} label={boardGame[rankIndex][fileIndex]} />
             </Square>
           );
         }}
