@@ -5,7 +5,7 @@
 
 
 
-[![chess](/assets/screenshot/screenshot1.png "Game")](https://dudipsh.github.io/chess/)
+[![chess](https://github.com/dudipsh/chess/blob/master/public/screenshot/screenshot1.png "Game")](https://dudipsh.github.io/chess/)
 
 
 ## Algebraic notation (chess)
