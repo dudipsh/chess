@@ -33,14 +33,6 @@ class ChessEngineService {
   }
 
   setMove(move: string): IMove {
-    if (this.stepCount === 0) {
-      const isValidSource = this.validateSource(move as Square);
-      if (isValidSource) {
-        this.setSourceMove(move);
-        this.stepCount++;
-      }
-      return this.move;
-    }
     if (this.stepCount === 1) {
       const isValidSource = this.validateTarget(move as Square);
       if (isValidSource) {
@@ -49,10 +41,20 @@ class ChessEngineService {
         this.stepCount = 0;
       } else {
         this.resetMove();
-        this.move = { ...MOVE };
+        this.move.to = "";
+        this.move.from = move;
       }
     }
-    return this.move;
+    if (this.stepCount === 0) {
+      const isValidSource = this.validateSource(move as Square);
+      if (isValidSource) {
+        this.setSourceMove(move);
+        this.stepCount++;
+      }
+      return this.move;
+    }
+
+    return { ...this.move };
   }
 
   setSourceMove(square: string) {
