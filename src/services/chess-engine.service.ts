@@ -14,10 +14,14 @@ const MOVE: IMove = {
 };
 
 class ChessEngineService {
-  move;
+  move = { ...MOVE };
   stepCount = 0;
 
   constructor() {
+    this.resetGame();
+  }
+
+  resetGame() {
     game.load(DEFAULT_FEN_BOARD);
     chessEngine.board = game.board();
     this.move = { ...MOVE };
@@ -116,12 +120,12 @@ class ChessEngineService {
 
     // checkmate?
     if (game.in_checkmate()) {
-      status = "Game over, " + moveColor + " is in checkmate.";
+      status = "Checkmate";
     }
 
     // draw?
     else if (game.in_draw()) {
-      status = "Game over, drawn position";
+      status = "Drawn";
     }
 
     // game still on

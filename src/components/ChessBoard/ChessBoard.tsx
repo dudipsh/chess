@@ -10,6 +10,7 @@ import { Color, Theme } from "../../common/enums";
 import { Source } from "../../common/types";
 import { Squares } from "./Squares/Squares";
 import { IMove } from "../../common/interface";
+import { GameOverModal } from "../modals/GameOeverModal/GameOeverModal";
 
 interface ChessBoardProps {
   playAs: Color;
@@ -25,6 +26,7 @@ export const ChessBoard = ({
   const [move, setMove] = useState<IMove>({ from: "", to: "" });
   const [selectedMove, setSelectedMove] = useState<string>("");
   const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
+  const [openGameOverModal, setOpenGameOverModal] = useState<boolean>(false);
   const files = INITIAL_FILES;
 
   useEffect(() => {
@@ -35,6 +37,12 @@ export const ChessBoard = ({
       setSelectedMove(move.to);
     }
   }, [move]);
+
+  useEffect(() => {
+    if (status === "Checkmate") {
+      setOpenGameOverModal(true);
+    }
+  }, [status]);
 
   useEffect(() => {
     setBoardGame(chessEngineService.getBoard());
@@ -62,6 +70,7 @@ export const ChessBoard = ({
     }
     setMove({ ...move });
     pcMove();
+    setStatus(chessEngineService.status());
   };
 
   const pcMove = () => {
@@ -71,12 +80,33 @@ export const ChessBoard = ({
         setSelectedMove(bestMove);
         setBoardGame([...chessEngineService.getBoard()]);
         setStatus(chessEngineService.status());
-      }, 1000);
+      }, 300);
     }
   };
 
+  const resetGame = () => {
+    setOpenGameOverModal(false);
+    chessEngineService.resetGame();
+    setBoardGame(chessEngineService.getBoard());
+    setStatus(chessEngineService.status());
+  };
+
+  const message = () => {
+    if (chessEngineService.turn() === "b") {
+      return "You Won! :)";
+    } else {
+      return "You Lost!";
+    }
+  };
+
+  const msg = message();
   return (
     <div className={theme}>
+      <GameOverModal
+        show={openGameOverModal}
+        message={msg}
+        onClose={() => resetGame()}
+      />
       <div className="flex justify-center">Status: {status}</div>
       <Squares boardGame={boardGame}>
         {({
