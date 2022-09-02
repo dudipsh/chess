@@ -8,10 +8,10 @@ export class ChessGame extends Chess {
   }
 
   randomMove = (): string => {
-    const possibleMoves = this.moves();
+    const possibleMoves = this.moves({ verbose: true });
     if (possibleMoves.length === 0) return "";
     const randomIdx = Math.floor(Math.random() * possibleMoves.length);
     this.move(possibleMoves[randomIdx]);
-    return possibleMoves[randomIdx];
+    return possibleMoves[randomIdx].to;
   };
 }

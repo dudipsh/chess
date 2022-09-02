@@ -1,7 +1,7 @@
 export const EMPTY_MOVE = {
-  color: undefined,
+  color: "",
   flags: "",
-  piece: undefined,
+  piece: "",
   san: "",
   from: "",
   to: "",

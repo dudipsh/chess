@@ -38,24 +38,7 @@ class ChessEngineService {
   }
 
   getBestMove(): string {
-    const move = game.randomMove();
-    return this.getSquare(move);
-  }
-  setSourceMove(square: string) {
-    this.move.to = "" as Square;
-    this.move.from = square as Square;
-  }
-
-  resetMove() {
-    this.stepCount = 0;
-    this.move = { ...EMPTY_MOVE };
-  }
-
-  getSquare(move: string) {
-    if (!move) return "";
-    // Ng6 => g6
-    // Nxd8 => d8
-    return move.substring(move.length - 2, move.length);
+    return game.randomMove();
   }
 
   // todo implement "Best move" logic
@@ -63,18 +46,9 @@ class ChessEngineService {
     return game.moves({ square, verbose: true });
   }
 
-  piece(square: string) {
-    return game.get(square as Square);
-  }
-
   turn() {
     return game.turn();
   }
-
-  setFen(fen: string) {
-    game.load(fen);
-  }
-
   status() {
     let status = "";
 
@@ -103,10 +77,6 @@ class ChessEngineService {
       }
     }
     return status;
-  }
-
-  getFen() {
-    return game.fen();
   }
 }
 
