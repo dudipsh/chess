@@ -1,11 +1,16 @@
 
 
-### `yarn install`
-### `yarn start`
 
 
 
 [![chess](https://github.com/dudipsh/chess/blob/master/public/screenshot/screenshot1.png "Game")](https://dudipsh.github.io/chess/)
+
+
+### Run demo
+```textmate
+yarn install
+yarn start
+```
 
 
 ## Algebraic notation (chess)

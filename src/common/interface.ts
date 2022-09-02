@@ -1,6 +1,8 @@
 import { Source } from "./types";
+import { Move } from "chess.js";
 
-export interface IMove {
-  from: Source | string;
-  to: Source | string;
+export interface IMove extends Move {
+  from: Source | any;
+  to: Source | any;
+  points?: number;
 }

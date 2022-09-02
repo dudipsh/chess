@@ -39,24 +39,4 @@ export const INITIAL_FILES = ["a", "b", "c", "d", "e", "f", "g", "h"].reverse();
 export const DEFAULT_FEN_BOARD =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-/**
- * Example:
- *   getFileRank("a2") => [0, 6]
- *
- * @param {string} square - Eg: "a2"
- */
-const getFileRank = (square: string) => {
-  const file = square.substring(0, 1) as string;
-  const rank = Number(square.substring(1, 2)) as number;
-  return [FILES[file], RANKS[rank]];
-};
-
-const emptyBoard = () => {
-  const board = [];
-  for (let i = 0; i < 8; i++) {
-    board[i] = [];
-  }
-  return board;
-};
-
-export { emptyBoard, getFileRank, FILES, RANKS, IMAGE_PATH };
+export { FILES, RANKS, IMAGE_PATH };
