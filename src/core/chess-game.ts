@@ -1,5 +1,6 @@
 import { Chess } from "chess.js";
 
+// Base class for chess game
 export class ChessGame extends Chess {
   constructor(args?: any) {
     super(args);

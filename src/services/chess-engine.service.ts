@@ -1,20 +1,14 @@
 import { Square } from "chess.js";
 
 import { DEFAULT_FEN_BOARD } from "../utils/board-utils";
-
 import { ChessGame } from "../core/chess-game";
-import { IMove } from "../common/interface";
+import { EMPTY_MOVE } from "../common/constants";
 
-const jsChessEngine = require("js-chess-engine");
 const game = new ChessGame();
-const chessEngine = new jsChessEngine.Game(game);
-const MOVE: IMove = {
-  from: "",
-  to: "",
-};
 
 class ChessEngineService {
-  move = { ...MOVE };
+  private lastMove = "";
+  private move = { ...EMPTY_MOVE };
   stepCount = 0;
 
   constructor() {
@@ -23,8 +17,20 @@ class ChessEngineService {
 
   resetGame() {
     game.load(DEFAULT_FEN_BOARD);
-    chessEngine.board = game.board();
-    this.move = { ...MOVE };
+    this.move = { ...EMPTY_MOVE };
+  }
+
+  makeAMove(move: string) {
+    const validMoves = game.moves({ verbose: true });
+    const validMove = validMoves.find((m) => m.to === move);
+    if (validMove) {
+      game.move({ from: this.lastMove as Square, to: validMove.to });
+      game.load(game.fen());
+      this.lastMove = "";
+      return validMove;
+    }
+    this.lastMove = move;
+    return validMove;
   }
 
   getBoard(): any[][] {
@@ -35,51 +41,14 @@ class ChessEngineService {
     const move = game.randomMove();
     return this.getSquare(move);
   }
-
-  setMove(move: string): IMove {
-    if (this.stepCount === 1) {
-      const isValidSource = this.validateTarget(move as Square);
-      if (isValidSource) {
-        this.move.to = move;
-        this.makeMove();
-        this.stepCount = 0;
-      } else {
-        this.resetMove();
-        this.move.to = "";
-        this.move.from = move;
-      }
-    }
-    if (this.stepCount === 0) {
-      const isValidSource = this.validateSource(move as Square);
-      if (isValidSource) {
-        this.setSourceMove(move);
-        this.stepCount++;
-      }
-      return this.move;
-    }
-
-    return { ...this.move };
-  }
-
   setSourceMove(square: string) {
-    this.move.to = "";
-    this.move.from = square;
+    this.move.to = "" as Square;
+    this.move.from = square as Square;
   }
 
   resetMove() {
     this.stepCount = 0;
-    this.move = { ...MOVE };
-  }
-
-  makeMove() {
-    const move = game.move({
-      from: this.move.from as Square,
-      to: this.move.to as Square,
-      promotion: "q", // NOTE: always promote to a queen for example simplicity
-    });
-    // illegal move
-    if (move === null) return "snapback";
-    game.load(game.fen());
+    this.move = { ...EMPTY_MOVE };
   }
 
   getSquare(move: string) {
@@ -89,13 +58,9 @@ class ChessEngineService {
     return move.substring(move.length - 2, move.length);
   }
 
+  // todo implement "Best move" logic
   possibleMoves(square: string) {
-    return game.moves({ square }).map((move) => {
-      if (move.length > 2) {
-        return this.getSquare(move);
-      }
-      return move;
-    });
+    return game.moves({ square, verbose: true });
   }
 
   piece(square: string) {
@@ -140,23 +105,8 @@ class ChessEngineService {
     return status;
   }
 
-  validateSource(source: Square) {
-    const sourcePiece = game.get(source);
-    if (!sourcePiece) {
-      return false;
-    }
-    return sourcePiece.color === game.turn();
-  }
-
-  validateTarget(target: string) {
-    const targetPiece = game.get(target as Square);
-    if (!targetPiece) {
-      return !!game.move({
-        from: this.move.from as Square,
-        to: target as Square,
-      });
-    }
-    return targetPiece.color !== game.turn();
+  getFen() {
+    return game.fen();
   }
 }
 

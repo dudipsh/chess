@@ -9,7 +9,6 @@ import { chessEngineService } from "../../services/chess-engine.service";
 import { Color, Theme } from "../../common/enums";
 import { Source } from "../../common/types";
 import { Squares } from "./Squares/Squares";
-import { IMove } from "../../common/interface";
 import { GameOverModal } from "../modals/GameOeverModal/GameOeverModal";
 
 interface ChessBoardProps {
@@ -23,20 +22,11 @@ export const ChessBoard = ({
 }: ChessBoardProps) => {
   const [boardGame, setBoardGame] = useState<any[]>([]);
   const [status, setStatus] = useState<string>(`${Color[playAs]} to move`);
-  const [move, setMove] = useState<IMove>({ from: "", to: "" });
+  const [move, setMove] = useState<any>({ from: "", to: "" });
   const [selectedMove, setSelectedMove] = useState<string>("");
   const [possibleMoves, setPossibleMoves] = useState<string[]>([]);
   const [openGameOverModal, setOpenGameOverModal] = useState<boolean>(false);
   const files = INITIAL_FILES;
-
-  useEffect(() => {
-    if (move.from) {
-      setSelectedMove(move.from);
-    }
-    if (move.to) {
-      setSelectedMove(move.to);
-    }
-  }, [move]);
 
   useEffect(() => {
     if (status === "Checkmate") {
@@ -49,28 +39,24 @@ export const ChessBoard = ({
   }, []);
 
   const highlightPath = (source: Source) => {
-    const moves = chessEngineService.possibleMoves(source);
+    const moves = chessEngineService
+      .possibleMoves(source)
+      .map((move) => move.to);
     setPossibleMoves(moves);
   };
 
   const handleSelectedSquare = (square: Source) => {
-    const move = chessEngineService.setMove(square);
-    if (!move.from && !move.to) {
-      setMove({ ...move });
+    const newMove = chessEngineService.makeAMove(square);
+    if (newMove) {
+      setMove({ ...newMove });
       setSelectedMove("");
+      setBoardGame(chessEngineService.getBoard());
+      pcMove();
       setPossibleMoves([]);
-      return;
+    } else {
+      setMove({ ...move, from: square });
+      highlightPath(square);
     }
-    if (move.from) {
-      highlightPath(move.from as Source);
-    }
-    if (move.to) {
-      setBoardGame([...chessEngineService.getBoard()]);
-      setStatus(chessEngineService.status());
-    }
-    setMove({ ...move });
-    pcMove();
-    setStatus(chessEngineService.status());
   };
 
   const pcMove = () => {
