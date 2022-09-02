@@ -24,7 +24,11 @@ class ChessEngineService {
     const validMoves = game.moves({ verbose: true });
     const validMove = validMoves.find((m) => m.to === move);
     if (validMove) {
-      game.move({ from: this.lastMove as Square, to: validMove.to });
+      game.move({
+        from: this.lastMove as Square,
+        to: validMove.to,
+        promotion: "q",
+      });
       game.load(game.fen());
       this.lastMove = "";
       return validMove;
