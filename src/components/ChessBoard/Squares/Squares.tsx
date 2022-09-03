@@ -1,5 +1,5 @@
 import { Source } from "../../../common/types";
-import { INITIAL_FILES } from "../../../utils/board-utils";
+import { INITIAL_FILES } from "../../../common/constants";
 
 interface SquaresProps {
   boardGame: any[];

@@ -1,8 +1,8 @@
 import { Square } from "chess.js";
 
-import { DEFAULT_FEN_BOARD } from "../utils/board-utils";
 import { ChessGame } from "../core/chess-game";
-import { EMPTY_MOVE } from "../common/constants";
+import { DEFAULT_FEN_BOARD, EMPTY_MOVE } from "../common/constants";
+import { IMove } from "../common/interface";
 
 const game = new ChessGame();
 
@@ -41,13 +41,26 @@ class ChessEngineService {
     return game.board();
   }
 
-  getBestMove(): string {
-    return game.randomMove();
+  getBestMoves() {
+    let bestMove = game.findBestMoves(game);
+    if (!bestMove.to) {
+      const moves = game.moves({ verbose: true }) as IMove[];
+      bestMove = moves[0];
+    }
+    if (!bestMove) {
+      return null;
+    }
+    game.move({
+      from: bestMove.from as Square,
+      to: bestMove.to as Square,
+      promotion: "q",
+    });
+    game.load(game.fen());
+    return bestMove;
   }
 
-  // todo implement "Best move" logic
-  possibleMoves(square: string) {
-    return game.moves({ square, verbose: true });
+  possibleMoves(square?: string) {
+    return game.possibleMovesForSquare(square);
   }
 
   turn() {

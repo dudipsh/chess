@@ -1,42 +1,38 @@
-const RANKS: Record<number, number> = {
-  1: 7,
-  2: 6,
-  3: 5,
-  4: 4,
-  5: 3,
-  6: 2,
-  7: 1,
-  8: 0,
-};
-const FILES: Record<string, number> = {
-  a: 0,
-  b: 1,
-  c: 2,
-  d: 3,
-  e: 4,
-  f: 5,
-  g: 6,
-  h: 7,
+import { Move } from "chess.js";
+import {
+  FILES,
+  IMAGE_PATH,
+  PIECE_POINT,
+  POSITION,
+  RANK,
+  RANKS,
+} from "../common/constants";
+
+export const boardPoint = (move: Move) => {
+  const fromPos = getPositions(move.color);
+  const { to } = move;
+  const fileIndex = FILES[to[0]];
+  const rankIndex = RANK[Number(to[1])];
+  const points = fromPos[move.piece][rankIndex][fileIndex];
+  return points;
 };
 
-const IMAGE_PATH: Record<string, string> = {
-  B: "assets/images/bishop_w.png",
-  b: "assets/images/bishop_b.png",
-  R: "assets/images/rook_w.png",
-  r: "assets/images/rook_b.png",
-  N: "assets/images/knight_w.png",
-  n: "assets/images/knight_b.png",
-  Q: "assets/images/queen_w.png",
-  q: "assets/images/queen_b.png",
-  K: "assets/images/king_w.png",
-  k: "assets/images/king_b.png",
-  P: "assets/images/pawn_w.png",
-  p: "assets/images/pawn_b.png",
+const getPositions = (color: string) => {
+  if (color === "b") {
+    const positions = {
+      p: POSITION.p.reverse(),
+      n: POSITION.n.reverse(),
+      b: POSITION.b.reverse(),
+      q: POSITION.q.reverse(),
+      k: POSITION.k.reverse(),
+      r: POSITION.r.reverse(),
+      k_e: POSITION.k_e.reverse(),
+    };
+    return positions;
+    // reverse the array
+  } else {
+    return POSITION;
+  }
 };
 
-export const INITIAL_FILES = ["a", "b", "c", "d", "e", "f", "g", "h"].reverse();
-
-export const DEFAULT_FEN_BOARD =
-  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-export { FILES, RANKS, IMAGE_PATH };
+export { FILES, IMAGE_PATH, RANK, RANKS, getPositions };

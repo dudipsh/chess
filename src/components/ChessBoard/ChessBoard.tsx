@@ -3,13 +3,12 @@ import { Square } from "./Square/Square";
 import { Piece } from "./Piece/Piece";
 import { useEffect, useState } from "react";
 
-import { INITIAL_FILES } from "../../utils/board-utils";
-
 import { chessEngineService } from "../../services/chess-engine.service";
 import { Color, Theme } from "../../common/enums";
 import { Source } from "../../common/types";
 import { Squares } from "./Squares/Squares";
 import { GameOverModal } from "../modals/GameOeverModal/GameOeverModal";
+import { INITIAL_FILES } from "../../common/constants";
 
 interface ChessBoardProps {
   playAs: Color;
@@ -62,10 +61,14 @@ export const ChessBoard = ({
   const pcMove = () => {
     if (chessEngineService.turn() === "b") {
       setTimeout(() => {
-        const bestMove = chessEngineService.getBestMove();
-        setSelectedMove(bestMove);
-        setBoardGame([...chessEngineService.getBoard()]);
-        setStatus(chessEngineService.status());
+        const bestMove = chessEngineService.getBestMoves();
+        if (!bestMove) {
+          setOpenGameOverModal(true);
+        } else {
+          setSelectedMove(bestMove.to);
+          setBoardGame([...chessEngineService.getBoard()]);
+          setStatus(chessEngineService.status());
+        }
       }, 300);
     }
   };
